@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'font';
+    font-weight: normal;
+    src: url("../images/font.otf") format("opentype");
+}
+
+@font-face {
+    font-family: 'font';
+    font-weight: bold;
+    src: url("../images/font.otf") format("opentype");
+}
+
+body {
+  background: url('../images/background.png');
+  font-family: 'font';
+  width:350px;
+  height:240px;
+}
+
+#number_pages {
+    font-family: 'font';
+    font-weight: normal;
+    box-shadow: 1px 1px 1px #657A91;
+    display:block; 
+    line-height: 50px;
+    font-size: 16px;
+    padding-left:10px;
+    padding-top: 4px;
+    padding-bottom: 0px;
+    width:242px; 
+    height:23px;
+    border:2px solid #175597;
+    border-radius: 40px;
+}
+
+#number_pages:focus {
+    outline: none;
+}
+
+#start_reordering{
+    margin-top: 10px;
+    font-family: 'font';
+    font-size: 16px;
+    outline: none;
+    line-height: 40px;
+    color:white;
+    background: url('../images/button.png');
+    width: 106px;
+    cursor: pointer;
+    height: 36px;
+    border:none;
+    padding:0px;
+}
+
+#start_reordering:hover{
+    opacity: 0.9;
+}
+
+#start_reordering:focus{
+    color:black;
+}

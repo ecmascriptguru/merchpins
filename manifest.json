@@ -1,0 +1,43 @@
+{
+  "manifest_version": 2,
+  "name": "MerchPins",
+  "short_name": "MerchPins",
+  "homepage_url": "http://pinterest.com/",
+  "version": "1.0",
+  "icons": {
+    "16": "images/icon.png",
+    "128": "images/icon.png"
+  },
+  "browser_action": {
+    "default_icon": "images/mini.png",
+    "default_popup": "html/popup.html"
+  },
+  "background": {
+    "scripts": [
+      "js/jquery-3.1.1.min.js",
+      "js/iconAnimator.js",
+      "js/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "run_at": "document_start",
+      "matches": [
+        "*://pinterest.com/*", "*://www.pinterest.com/*", "*://*.pinterest.com/*"
+      ],
+      "js": [
+        "js/jquery-3.1.1.min.js",
+        "js/content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+  "web_accessible_resources": [
+      "images/*",
+      "html/*"
+  ]
+}
