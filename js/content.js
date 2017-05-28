@@ -1,131 +1,113 @@
-var interval = null;
-var currentHeight = null;
+var loadRepins = (function() {
 
-chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
-    if (msg.main_action == 'reorder') {
-        startReordering(msg.number_pages);
-    }
-    if (msg.main_action == 'show_window') {
-        if ($('.merchipins-window').length > 0) {
-            $('.merchipins-window').remove();
+    var pages = 5;
+    var count = 0;
+    var mylist = [];
+    var timeout;
+
+    function load() {
+
+        $('.Pin').each(function() {
+            mylist.push($(this)[0])
+        });
+
+        if (pages > 0) {
+
+            $(window).scrollTop($(document).height());
+
+            timeout = window.setTimeout(load, 4000);
+
+            count++;
+            if (count == pages) {
+                finish();
+            }
+
         } else {
-            $('body').append('<img class="merchipins-window" style="cursor: pointer;  z-index: 999999; border: none; position: fixed; top: 11px; right: 21px; " src="'+chrome.extension.getURL('images/close.png')+'" />');
-            $('body').append('<iframe class="merchipins-window" id="merchipins-window" style="background: #999; box-shadow: 1px 1px 5px #888888; border: 1px solid #CCC; z-index: 99999; border: none; position: fixed; top: 20px; right: 30px; width:350px; height: 270px;" src="'+chrome.extension.getURL('html/browser_action.html')+'" />')
-
-            $('img.merchipins-window').click(function(){
-                $('.merchipins-window').remove();
-            });
+            finish();
         }
     }
-});
 
-function startReordering(pages) {
-    $('.merchipins-window').remove();
-    $('body').append('<div id="loading-page-merchpins" style="opacity: 0.4; background: black; position: fixed; top: 0px; left: 0px; right: 0px; bottom: 0px; text-align: center;"><img style="position: fixed; top: 45%; margin-left:-40px;" width="80px" src="'+chrome.extension.getURL('images/loader.svg')+'" /></div>')
-    currentHeight = $('.variableHeightLayout').height();
+    function finish() {
 
-    interval = setInterval(function(){
-        var tempHeight = $('.variableHeightLayout').height();
-        if (currentHeight != tempHeight) {
-            currentHeight = tempHeight;
+        window.clearTimeout(timeout);
 
-            pages--;
-            if (pages > 0) {
-                oneMorePage();
-            } else {
-                clearAndFinish();
+        var list = mylist.filter(function(f) {
+            if ($(f).find('.repinIconSmall').length > 0) {
+                return f;
             }
+        });
+
+        list.sort(function(a, b) {
+            var compAText = $(a).find('.repinIconSmall').next().text().trim(),
+                compBText = $(b).find('.repinIconSmall').next().text().trim();
+            // var compA = Number(compAText.replace(/[^0-9]/g, ''));
+            // var compB = Number(compBText.replace(/[^0-9]/g, ''));
+            var compA = turnK(compAText);
+            var compB = turnK(compBText);
+            return (compA == compB) ? 0 : (compA > compB) ? -1 : 1;
+        });
+
+        if ($(".Grid").length) {
+            $(".Grid").before('<div id="organized"></div>');
+        } else {
+            $(".gridCentered").before('<div id="organized"></div>');
         }
 
-        if ($('.gridFooterLogoIcon').is(":visible")) {
-            clearAndFinish();
-        }
-    }, 100);
 
-    oneMorePage();
-}
+        $.each(list, function(idx, itm) {
+            $("#organized").append($(itm));
+        });
 
-function clearAndFinish() {
-    clearInterval(interval);
-    reorderResults();
-    reorderIsDone();
-}
+        $('.Pin').css({
+            'position': 'relative',
+            'top': 'auto',
+            'left': 'auto',
+            'display': 'inline-block',
+            'vertical-align': 'top',
+            'margin-left': 10
+        });
 
-function oneMorePage() {
-    $("html, body").scrollTop(document.body.clientHeight);
-}
-
-function compare(a,b) {
-  if (a.num < b.num)
-    return -1;
-  if (a.num > b.num)
-    return 1;
-  return 0;
-}
-
-function reorderResults() {
-
-    var leftColumns = {};
-    var pins = [];
-    $('.item').each(function() {
-        leftColumns[$(this).position().left] = 1;
-
-        $('.visuallyHidden').remove();
-        var temp = $.trim($(this).find('.repinCountSmall').text()).replace(/k/g, '000');
-        if (temp.indexOf('.') > 0 || temp.indexOf(',') > 0) {
-            temp = temp.replace('0', ''); // remove one zero
+        if ($(".Grid").length) {
+            $(".Grid").remove();
+        } else {
+            $(".gridCentered").remove();
         }
 
-        var pinCount = parseInt(temp.replace(/,/g, '').replace(/\./g,''));
+        chrome.runtime.sendMessage({main_action: 'reorder_done'});
+    }
 
-        pins.push({num: pinCount, html: $(this).html()});
-    });
-    numberColumns = Object.keys(leftColumns).length;
-
-    var item = 0;
-    pins.sort(compare).reverse().forEach(function(one) {
-        var el = $('.item').eq(item);
-        el.html(one.html);
-        item++;
-    });
-
-
-    item = 0;
-    var heights = [];
-    var biggestHeight = 0;
-    var totalheight = 0;
-    $('.item').each(function(){
-        
-        $(this).css({'top' : totalheight + 'px'});
-        $(this).css({'left': Object.keys(leftColumns)[heights.length] + 'px'});
-
-        heights.push($(this).find('img').height()+$(this).find('.pinMetaWrapper').outerHeight()+50);
-        $(this).height(getMax(heights));
-
-        if (heights.length == numberColumns) {
-            biggestHeight = getMax(heights);
-
-            for (var i=0; i<numberColumns; i++) {
-                $('.item').eq(item-i).height(biggestHeight);
-            }
-
-            totalheight += $('.item').eq(item).outerHeight();
-
-            heights = [];
+    function turnK(text) {
+        var number = Number(text.replace(/[^0-9]/g, ''));
+        if (text.indexOf("k") !== -1) {
+            number = number * 1000;
         }
+        return number;
+    }
 
-        item++;
-    });
+    function resetValues(pageCount, initialCount, list) {
+        pages = pageCount;
+        count = initialCount;
+        mylist = list;
+        clearTimeout(timeout);
+    }
 
-    $("html, body").scrollTop(0);
-  
-}
+    return function(page) {
+        resetValues(page, 0, []);
+        load();
+    }
 
-function getMax(arr) {
-    return Math.max.apply(Math, arr)
-}
+}());
 
-function reorderIsDone() {
-    $('#loading-page-merchpins').remove();
-    chrome.runtime.sendMessage({main_action: 'reorder_done'});
-}
+
+
+chrome.runtime.onMessage.addListener(
+    function(request) {
+        if (request.main_action === "reorder") {
+            console.log("Sort by repins");
+            loadRepins(request.number_pages);
+        } else if (request.main_action == "sort_by_likes") {
+            // console.log("Sort by likes");
+            // loadLikes(request.pages);
+        }
+    }
+);

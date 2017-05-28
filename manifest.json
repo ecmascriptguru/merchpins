@@ -10,7 +10,7 @@
   },
   "browser_action": {
     "default_icon": "images/mini.png",
-    "default_popup": "html/popup.html"
+    "default_popup": "html/browser_action.html"
   },
   "background": {
     "scripts": [

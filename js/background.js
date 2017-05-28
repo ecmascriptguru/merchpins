@@ -45,13 +45,11 @@ function stopAnimation() {
 }
 
 function isPinterestSearch(url) {
-    if (url.indexOf('.pinterest.') > 0) {
-        if (url.indexOf('/search/') > 0) {
-            return true;
-        }
+    if (url.indexOf('https://www.pinterest.com') == 0) {
+        return true;
+    } else {
+        return false;
     }
-
-    return false;
 }
 
 /* HANDLE INSTALL ACTION*/
