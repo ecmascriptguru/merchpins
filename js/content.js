@@ -31,7 +31,28 @@ var loadRepins = (function() {
         }
     }
 
+    function getColsCount() {
+        let width = $(".Pin").parents("._4e").innerWidth(),
+            postWidth = 236,
+            horGap = 24;
+
+        return (width + horGap) / (postWidth + horGap);
+    }
+
     function finish() {
+        let colsCount = getColsCount(),
+            positions = [];
+
+        for (let i = 0; i < colsCount; i ++) {
+            positions.push({
+                left: 0,
+                top: 0
+            })
+        }
+
+        for (let i = 1; i < positions.length; i ++) {
+            positions[i].left = (236 + 24) * i;
+        }
 
         window.clearTimeout(timeout);
 
@@ -52,35 +73,58 @@ var loadRepins = (function() {
         });
 
         if ($(".Grid").length) {
-            $(".Grid").before('<div id="organized"></div>');
+            $(".Grid").before('<div id="organized" style="margin:0 12px;"></div>');
         } else {
-            $(".gridCentered").before('<div id="organized"></div>');
+            $("._4e.relative").before('<div id="organized" style="margin:0 12px;"></div>');
+        }
+
+        let setPosition = (itm) => {
+            let minTop = Number.POSITIVE_INFINITY,
+                minIndex = 0;
+            
+            for (let i = 0; i < positions.length; i ++) {
+                if (positions[i].top < minTop) {
+                    minTop = positions[i].top;
+                    minIndex = i;
+                }
+            }
+            $(itm).css({
+                top: 0,
+                left: 0,
+                transform: `translateX(${positions[minIndex].left}px) translateY(${positions[minIndex].top}px)`,
+                width: "236px",
+                position: "absolute"
+            });
+            positions[minIndex].top += ($(itm).height() + 24);
         }
 
 
         $.each(list, function(idx, itm) {
             $("#organized").append($(itm));
+            setPosition(itm);
         });
 
-        $('.Pin').css({
-            'position': 'relative',
-            'top': 'auto',
-            'left': 'auto',
-            'display': 'inline-block',
-            'vertical-align': 'top',
-            'margin-left': 10
-        });
+        // $('.Pin').css({
+        //     'position': 'relative',
+        //     'top': 'auto',
+        //     'left': 'auto',
+        //     'display': 'inline-block',
+        //     'vertical-align': 'top',
+        //     'margin-left': 10
+        // });
 
         if ($(".Grid").length) {
             $(".Grid").remove();
         } else {
-            $(".gridCentered").remove();
+            $("._4e.relative").remove();
+            $("#organized").addClass("_4e relative");
+            // $(".gridCentered").remove();
         }
         reorderIsDone();
     }
 
     function turnK(text) {
-        var number = Number(text.replace(/[^0-9]/g, ''));
+        var number = Number(text.replace(/k/g, ''));
         if (text.indexOf("k") !== -1) {
             number = number * 1000;
         }
