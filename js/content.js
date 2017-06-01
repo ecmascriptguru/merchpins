@@ -1,13 +1,9 @@
-var interval = null;
-var currentHeight = null;
-var globalPins = null;
+let loadRepins = (function() {
 
-var loadRepins = (function() {
-
-    var pages = 5;
-    var count = 0;
-    var mylist = [];
-    var timeout;
+    let pages = 5;
+    let count = 0;
+    let mylist = [];
+    let timeout;
 
     function load() {
         $('.Pin').each(function() {
@@ -55,19 +51,17 @@ var loadRepins = (function() {
 
         window.clearTimeout(timeout);
 
-        var list = mylist.filter(function(f) {
+        let list = mylist.filter(function(f) {
             if ($(f).find('.repinIconSmall').length > 0) {
                 return f;
             }
         });
 
         list.sort(function(a, b) {
-            var compAText = $(a).find('.repinIconSmall').next().text().trim(),
+            let compAText = $(a).find('.repinIconSmall').next().text().trim(),
                 compBText = $(b).find('.repinIconSmall').next().text().trim();
-            // var compA = Number(compAText.replace(/[^0-9]/g, ''));
-            // var compB = Number(compBText.replace(/[^0-9]/g, ''));
-            var compA = turnK(compAText);
-            var compB = turnK(compBText);
+            let compA = turnK(compAText);
+            let compB = turnK(compBText);
             return (compA == compB) ? 0 : (compA > compB) ? -1 : 1;
         });
 
@@ -110,11 +104,19 @@ var loadRepins = (function() {
             $("#organized").addClass("_4e relative");
             // $(".gridCentered").remove();
         }
+
+        let containerHeight = 0;
+        positions.forEach((pos) => {
+            if (containerHeight < pos.top) {
+                containerHeight = pos.top;
+            }
+        });
+        $("#organized").height(containerHeight);
         reorderIsDone();
     }
 
     function turnK(text) {
-        var number = Number(text.replace(/k/g, ''));
+        let number = Number(text.replace(/k/g, ''));
         if (text.indexOf("k") !== -1) {
             number = number * 1000;
         }
