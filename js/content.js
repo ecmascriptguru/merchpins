@@ -10,7 +10,6 @@ var loadRepins = (function() {
     var timeout;
 
     function load() {
-
         $('.Pin').each(function() {
             mylist.push($(this)[0])
         });
@@ -129,8 +128,15 @@ var loadRepins = (function() {
         clearTimeout(timeout);
     }
 
+    function reorderIsDone() {
+        $('#loading-page-merchpins').remove();
+        $("html, body").scrollTop(0);
+        chrome.runtime.sendMessage({main_action: 'reorder_done'});
+    }
+
     return function(page) {
         resetValues(page, 0, []);
+        $('body').append('<div id="loading-page-merchpins" style="opacity: 0.4; background: black; position: fixed; top: 0px; left: 0px; right: 0px; bottom: 0px; text-align: center;"><img style="position: fixed; top: 45%; margin-left:-40px;" width="80px" src="'+chrome.extension.getURL('images/loader.svg')+'" /></div>');
         load();
     }
 
@@ -142,8 +148,4 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
     }
 });
 
-function reorderIsDone() {
-    $('#loading-page-merchpins').remove();
-    $("html, body").scrollTop(0);
-    chrome.runtime.sendMessage({main_action: 'reorder_done'});
-}
+    
