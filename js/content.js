@@ -1,3 +1,7 @@
+var interval = null;
+var currentHeight = null;
+var globalPins = null;
+
 var loadRepins = (function() {
 
     var pages = 5;
@@ -72,8 +76,7 @@ var loadRepins = (function() {
         } else {
             $(".gridCentered").remove();
         }
-
-        chrome.runtime.sendMessage({main_action: 'reorder_done'});
+        reorderIsDone();
     }
 
     function turnK(text) {
@@ -98,16 +101,124 @@ var loadRepins = (function() {
 
 }());
 
-
-
-chrome.runtime.onMessage.addListener(
-    function(request) {
-        if (request.main_action === "reorder") {
-            console.log("Sort by repins");
-            loadRepins(request.number_pages);
-        } else if (request.main_action == "sort_by_likes") {
-            // console.log("Sort by likes");
-            // loadLikes(request.pages);
-        }
+chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
+    if (msg.main_action == 'reorder') {
+        loadRepins(msg.number_pages);
+        // startReordering(msg.number_pages);
     }
-);
+});
+
+// function startReordering(pages) {
+//     $('body').append('<div id="loading-page-merchpins" style="opacity: 0.4; background: black; position: fixed; top: 0px; left: 0px; right: 0px; bottom: 0px; text-align: center;"><img style="position: fixed; top: 45%; margin-left:-40px;" width="80px" src="'+chrome.extension.getURL('images/loader.svg')+'" /></div>')
+//     currentHeight = $('.variableHeightLayout').height();
+
+//     interval = setInterval(function(){
+//         // var tempHeight = $('.variableHeightLayout').height();
+//         // if (currentHeight != tempHeight) {
+//         //     currentHeight = tempHeight;
+
+//             pages--;
+//             if (pages > 0) {
+//                 oneMorePage();
+//             } else {
+//                 clearAndFinish();
+//             }
+//         // }
+
+//         // if ($('.gridFooterLogoIcon').is(":visible")) {
+//         //     clearAndFinish();
+//         // }
+//     }, 500);
+
+//     oneMorePage();
+// }
+
+// function clearAndFinish() {
+//     clearInterval(interval);
+//     reorderResults();
+//     reorderIsDone();
+// }
+
+// function oneMorePage() {
+//     if (!globalPins) {
+//         globalPins = $(".Pin");
+//     } else {
+//         $(".Pin").each(() => {
+//             globalPins.push($(this)[0]);
+//         });
+//     }
+//     $("html, body").scrollTop(document.body.clientHeight);
+// }
+
+// function compare(a,b) {
+//   if (a.num < b.num)
+//     return -1;
+//   if (a.num > b.num)
+//     return 1;
+//   return 0;
+// }
+
+// function reorderResults() {
+
+//     var leftColumns = {};
+//     var pins = [];
+//     // $('.Pin').each(function() {
+//     globalPins.each(function() {
+//         leftColumns[$(this).position().left] = 1;
+
+//         $('.visuallyHidden').remove();
+//         var pinCount = parseInt($.trim($(this).find('.repinCountSmall').text()).replace(/k/g, '00').replace(/,/g, '').replace(/\./g,''));//)
+
+//         pins.push({num: pinCount, html: $(this).html()});
+//     });
+//     numberColumns = Object.keys(leftColumns).length;
+
+//     var item = 0;
+//     pins.sort(compare).reverse().forEach(function(one) {
+//         var el = $('.item').eq(item);
+//         el.html(one.html);
+//         item++;
+//     });
+
+
+//     item = 0;
+//     var heights = [];
+//     var biggestHeight = 0;
+//     var totalheight = 0;
+//     // $('.item').each(function(){
+//     globalPins.each(function(){
+        
+//         $(this).css({'top' : totalheight + 'px'});
+//         $(this).css({'left': Object.keys(leftColumns)[heights.length] + 'px'});
+
+//         heights.push($(this).find('img').height()+$(this).find('.pinMetaWrapper').outerHeight()+50);
+//         $(this).height(getMax(heights));
+
+//         if (heights.length == numberColumns) {
+//             biggestHeight = getMax(heights);
+
+//             for (var i=0; i<numberColumns; i++) {
+//                 $('.item').eq(item-i).height(biggestHeight);
+//             }
+
+//             totalheight += $('.item').eq(item).outerHeight();
+
+//             heights = [];
+//         }
+
+//         item++;
+//     });
+
+//     $("html, body").scrollTop(0);
+  
+// }
+
+// function getMax(arr) {
+//     return Math.max.apply(Math, arr)
+// }
+
+function reorderIsDone() {
+    $('#loading-page-merchpins').remove();
+    $("html, body").scrollTop(0);
+    chrome.runtime.sendMessage({main_action: 'reorder_done'});
+}
