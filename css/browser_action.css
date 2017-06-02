@@ -1,77 +1,61 @@
+@font-face {
+    font-family: 'font';
+    font-weight: normal;
+    src: url("../images/font.otf") format("opentype");
+}
+
+@font-face {
+    font-family: 'font';
+    font-weight: bold;
+    src: url("../images/font.otf") format("opentype");
+}
 
 body {
-  background: #F8A434;
-  font-family: 'Lato', sans-serif;
-  color: #FDFCFB;
-  text-align: center;
-  width:250px;
+  background: url('../images/background.png');
+  font-family: 'font';
+  width:350px;
+  height:240px;
 }
 
-
-form {
-  width: 450px;
-  margin: 17% auto;
-}
-
-
-.header {
-  font-size: 35px;
-  text-transform: uppercase;
-  letter-spacing: 5px;
-}
-
-
-.description {
-  font-size: 14px;
-  letter-spacing: 1px;
-  line-height: 1.3em;
-  margin: -2px 0 45px;
-}
-
-
-.input {
-  display: flex;
-  align-items: center;
-}
-
-
-.button {
-  height: 44px;
-  border: none;
-}
-
-  
 #number_pages {
-  width: 60%;
-  background: #FDFCFB;
-  font-family: inherit;
-  color: #737373;
-  letter-spacing: 1px;
-  text-indent: 5%;
-  border-radius: 5px 0 0 5px;
+    font-family: 'font';
+    font-weight: normal;
+    box-shadow: 1px 1px 1px #657A91;
+    display:block; 
+    line-height: 50px;
+    font-size: 16px;
+    padding-left:10px;
+    padding-top: 4px;
+    padding-bottom: 0px;
+    width:242px; 
+    height:23px;
+    border:2px solid #175597;
+    border-radius: 40px;
 }
-
-
-#start_reordering {
-  width: 40%;
-  height: 46px;
-  background: #BD0E13;
-  font-family: inherit;
-  font-weight: bold;
-  color: inherit;
-  letter-spacing: 1px;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  transition: background .3s ease-in-out;
-}
-
-#start_reordering:hover {
-  background: #FF0F00;
-}
-  
 
 #number_pages:focus {
-  outline: none !important;
-  outline: 2px solid #E86C8D;
-  box-shadow: 0 0 2px #E86C8D;
+    outline: none;
+}
+
+#start_reordering{
+    margin-top: 10px;
+    font-family: 'font';
+    font-size: 16px;
+    outline: none;
+    line-height: 40px;
+    color:white;
+    background: url('../images/button.png');
+    width: 106px;
+    cursor: pointer;
+    height: 36px;
+    border:none;
+    padding:0px;
+}
+
+#start_reordering:hover{
+    opacity: 0.9;
+}
+
+#start_reordering:focus{
+    color:black;
 }

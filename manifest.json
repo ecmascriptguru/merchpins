@@ -3,14 +3,14 @@
   "name": "MerchPins",
   "short_name": "MerchPins",
   "homepage_url": "http://pinterest.com/",
-  "version": "1.0.1",
+  "version": "1.0",
   "icons": {
     "16": "images/icon.png",
     "128": "images/icon.png"
   },
   "browser_action": {
-    "default_icon": "images/icon.png",
-    "default_popup": "html/browser_action.html"
+    "default_icon": "images/mini.png",
+    "default_popup": "html/popup.html"
   },
   "background": {
     "scripts": [
@@ -37,6 +37,7 @@
     "tabs"
   ],
   "web_accessible_resources": [
-      "images/*"
+      "images/*",
+      "html/*"
   ]
 }
