@@ -52,14 +52,14 @@ let loadRepins = (function() {
         window.clearTimeout(timeout);
 
         let list = mylist.filter(function(f) {
-            if ($(f).find('.repinIconSmall').length > 0) {
+            if ($(f).find('.repinCountSmall').length > 0) {
                 return f;
             }
         });
 
         list.sort(function(a, b) {
-            let compAText = $(a).find('.repinIconSmall').next().text().trim(),
-                compBText = $(b).find('.repinIconSmall').next().text().trim();
+            let compAText = $(a).find('.repinCountSmall').text().trim(),
+                compBText = $(b).find('.repinCountSmall').text().trim();
             let compA = turnK(compAText);
             let compB = turnK(compBText);
             return (compA == compB) ? 0 : (compA > compB) ? -1 : 1;
