@@ -58,8 +58,8 @@ let loadRepins = (function() {
         });
 
         list.sort(function(a, b) {
-            let compAText = $(a).find('.repinCountSmall').text().trim(),
-                compBText = $(b).find('.repinCountSmall').text().trim();
+            let compAText = $(a).find('.repinCountSmall').text().trim().split(" ")[0],
+                compBText = $(b).find('.repinCountSmall').text().trim().split(" ")[0];
             let compA = turnK(compAText);
             let compB = turnK(compBText);
             return (compA == compB) ? 0 : (compA > compB) ? -1 : 1;
