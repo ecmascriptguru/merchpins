@@ -67,8 +67,9 @@ let loadRepins = (function() {
 
         if ($(".Grid").length) {
             $(".Grid").before('<div id="organized" style="margin:0 12px;"></div>');
-        } else {
-            // $("._4e.relative").before('<div id="organized" style="margin:0 12px;"></div>');
+        } else if ($("._4e.relative").length > 0) {
+            $("._4e.relative").before('<div id="organized" style="margin:0 12px;"></div>');
+        } else {            
             $("._tr._2a").before('<div id="organized" style="margin:0 12px;"></div>');
         }
 
@@ -101,10 +102,13 @@ let loadRepins = (function() {
         if ($(".Grid").length) {
             $(".Grid").remove();
         } else {
-            // $("._4e.relative").remove();
-            $("._tr._2a").remove();
-            // $("#organized").addClass("_4e relative");
-            $("#organized").addClass("_tr _2a");
+            if ($("._4e.relative").length > 0) {
+                $("._4e.relative").remove();
+                $("#organized").addClass("_4e relative");
+            } else if ($("._tr._2a").length > 0) {
+                $("._tr._2a").remove();
+                $("#organized").addClass("_tr _2a");
+            }
             // $(".gridCentered").remove();
         }
 
