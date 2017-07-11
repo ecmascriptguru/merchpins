@@ -24,7 +24,10 @@
       "all_frames": true,
       "run_at": "document_end",
       "matches": [
-        "*://pinterest.com/*", "*://www.pinterest.com/*", "*://*.pinterest.com/*"
+        "*://pinterest.com/*",
+        "*://www.pinterest.com/*",
+        "*://www.pinterest.co.uk/*",
+        "*://*.pinterest.com/*"
       ],
       "js": [
         "js/jquery-3.1.1.min.js",

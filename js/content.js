@@ -27,7 +27,7 @@ let loadRepins = (function() {
     }
 
     function getColsCount() {
-        let width = $(".Pin").parents("._4e").innerWidth(),
+        let width = $(".Pin").parents("._tr").innerWidth(),
             postWidth = 236,
             horGap = 24;
 
@@ -68,7 +68,8 @@ let loadRepins = (function() {
         if ($(".Grid").length) {
             $(".Grid").before('<div id="organized" style="margin:0 12px;"></div>');
         } else {
-            $("._4e.relative").before('<div id="organized" style="margin:0 12px;"></div>');
+            // $("._4e.relative").before('<div id="organized" style="margin:0 12px;"></div>');
+            $("._tr._2a").before('<div id="organized" style="margin:0 12px;"></div>');
         }
 
         let setPosition = (itm) => {
@@ -100,8 +101,10 @@ let loadRepins = (function() {
         if ($(".Grid").length) {
             $(".Grid").remove();
         } else {
-            $("._4e.relative").remove();
-            $("#organized").addClass("_4e relative");
+            // $("._4e.relative").remove();
+            $("._tr._2a").remove();
+            // $("#organized").addClass("_4e relative");
+            $("#organized").addClass("_tr _2a");
             // $(".gridCentered").remove();
         }
 
