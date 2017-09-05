@@ -6,7 +6,7 @@ let loadRepins = (function() {
     let timeout;
 
     function load() {
-        $('.Pin').each(function() {
+        $(`[data-grid-item="true"]`).each(function() {
             mylist.push($(this)[0])
         });
 
@@ -27,7 +27,7 @@ let loadRepins = (function() {
     }
 
     function getColsCount() {
-        let width = $(".Pin").parents("._tr").innerWidth(),
+        let width = $(".Pin").parents("._u8._2f").innerWidth(),
             postWidth = 236,
             horGap = 24;
 
@@ -70,7 +70,10 @@ let loadRepins = (function() {
         } else if ($("._4e.relative").length > 0) {
             $("._4e.relative").before('<div id="organized" style="margin:0 12px;"></div>');
         } else {            
-            $("._tr._2a").before('<div id="organized" style="margin:0 12px;"></div>');
+            // $("._tr._2a").before('<div id="organized" style="margin:0 12px;"></div>');
+            $("._u8._2f").before('<div id="organized" style="margin:0 12px;position:relative"></div>');
+            $("._u8._2f").hide();
+            // $("._u8._2f").attr({id: "organized"}).children().remove();
         }
 
         let setPosition = (itm) => {
