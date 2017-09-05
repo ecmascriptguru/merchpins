@@ -123,6 +123,8 @@ let loadRepins = (function() {
         });
         $("#organized").height(containerHeight);
         reorderIsDone();
+        $(document).off("contextmenu", "div.dimOverlay")
+        downloadImg.init();
     }
 
     function turnK(text) {
@@ -154,9 +156,47 @@ let loadRepins = (function() {
 
 }());
 
+let downloadImg = (function() {
+    let img = null;
+    
+
+    const getImgUrl = () => {
+        return img;
+    }
+
+    const initContextMenu = () => {
+        $(document).ready(() => {
+            $(document).on("contextmenu", "div.dimOverlay", (event) => {
+                let imgTag = $(event.target).parents("[data-grid-item='true']");
+
+                if (!imgTag || imgTag.length == 0) {
+                    img = null;
+                } else {
+                    imgTag = imgTag.find(".fadeContainer img").eq(0)
+                    
+                    if (imgTag && imgTag.length) {
+                        img = imgTag[0].src;
+                    }
+                }
+            })
+        })
+    }
+
+    initContextMenu();
+
+    return {
+        img: getImgUrl,
+        init: initContextMenu,
+    }
+}())
+
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
     if (msg.main_action == 'reorder') {
         loadRepins(msg.number_pages);
+    }
+
+    if (msg.main_action == "img_url") {
+        sendResponse({img: downloadImg.img()});
     }
 
     if (msg.main_action == 'show_window') {

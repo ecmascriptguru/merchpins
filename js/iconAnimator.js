@@ -20,7 +20,7 @@ function iconAnimator(strPath){
 	var time = 0;
 	
 	this.set = function() {
-		chrome.browserAction.setIcon({path: { "19": strPath }});
+		// chrome.browserAction.setIcon({path: { "19": strPath }});
 	}
 	function ease(x) {
 		return (1-Math.sin(Math.PI/2+x*Math.PI))/2;

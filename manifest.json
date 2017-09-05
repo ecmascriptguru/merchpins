@@ -6,6 +6,7 @@
   "version": "1.0.6",
   "icons": {
     "16": "images/icon.png",
+    "19": "images/mini.png",
     "128": "images/icon.png"
   },
   "browser_action": {
@@ -37,6 +38,7 @@
   ],
   "permissions": [
     "activeTab",
+    "contextMenus",
     "tabs"
   ],
   "web_accessible_resources": [
