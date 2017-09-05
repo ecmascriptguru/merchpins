@@ -3,7 +3,7 @@
   "name": "MerchPins",
   "short_name": "MerchPins",
   "homepage_url": "http://pinterest.com/",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "icons": {
     "16": "images/icon.png",
     "19": "images/mini.png",
